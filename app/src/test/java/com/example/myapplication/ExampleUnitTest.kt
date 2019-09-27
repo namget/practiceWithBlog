@@ -1,8 +1,7 @@
 package com.example.myapplication
 
+import kotlinx.coroutines.*
 import org.junit.Test
-
-import org.junit.Assert.*
 
 /**
  * Example local unit test, which will execute on the development machine (host).
@@ -10,8 +9,22 @@ import org.junit.Assert.*
  * See [testing documentation](http://d.android.com/tools/testing).
  */
 class ExampleUnitTest {
+
+
     @Test
-    fun addition_isCorrect() {
-        assertEquals(4, 2 + 2)
+    fun oroutineTest1() {
+        val job = GlobalScope.launch(Dispatchers.Default) {
+            withTimeout(4200L) {
+                repeat(10) {
+                    delay(1000L)
+                    println("I'm working")
+                }
+            }
+        }
+        runBlocking {
+            job.join()
+            println("Coroutine is done..!")
+        }
     }
+
 }
