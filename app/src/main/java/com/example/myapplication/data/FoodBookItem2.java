@@ -16,10 +16,6 @@ public class FoodBookItem2 {
     // 수령시간
     String receiveTime;
 
-
-
-
-
     // 예약여부
     boolean isReservationed;
 
