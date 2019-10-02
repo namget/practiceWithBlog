@@ -14,20 +14,18 @@ class ExampleUnitTest {
 
 
     @Test
-    fun coroutineTest2() {
-        val job = GlobalScope.launch(Dispatchers.Default) {
-            withTimeout(4200L) {
-                repeat(10) {
-                    delay(1000L)
-                    println("I'm working")
-                }
-            }
+    fun blockingTest() {
+        GlobalScope.launch {
+            delay(1000L)
+            print("World!")
         }
+        println("Hello,")
         runBlocking {
-            job.join()
+            delay(2000L)
             println("Coroutine is done..!")
         }
     }
+
 
     fun main()= runBlocking {
         launch {
