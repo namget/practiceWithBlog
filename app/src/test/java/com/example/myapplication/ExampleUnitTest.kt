@@ -1,6 +1,7 @@
 package com.example.myapplication
 
-import kotlinx.coroutines.*
+import io.reactivex.Observable
+import io.reactivex.ObservableOnSubscribe
 import org.junit.Test
 
 /**
@@ -12,17 +13,47 @@ class ExampleUnitTest {
 
 
 
+    /**
+     *  doOnError보다 onErrorResumeNext가 먼저 나오게되면 error를 next로 내려주게된다.
+     * */
+    @Test
+    fun test() {
+//        Observable.just("emit 1", "emit 2", Exception())
+//            .subscribeOn(AndroidSchedulers.mainThread())
+//            .doOnError {}
+//            .onErrorResumeNext(Observable.just("emmit 3"))
+//            .subscribe {
+//
+//
+//            }
 
+        Observable.create(ObservableOnSubscribe<String> { subscriber ->
+            println("Start to subscribe items")
+            subscriber.onError(Throwable("Occurs Error!!"))
+            subscriber.onNext("emit 1")
+            subscriber.onNext("emit 2")
+//            subscriber.onError(Throwable("Occurs Error!!"))
+        })
+            .onErrorResumeNext(
+                Observable.just("emit 3")
+            )
+            .doOnError { println("doOnError") }
+            .subscribe(
+                { next -> println("Next : $next") },
+                { err -> println("Error : " + err.toString()) })
+    }
+
+/*
     @Test
     fun blockingTest() {
         GlobalScope.launch {
             delay(1000L)
-            print("World!")
+            println("World!")
         }
-        println("Hello,")
+        printlnlnln("Hello,")
         runBlocking {
             delay(2000L)
-            println("Coroutine is done..!")
+            printlnln("Coroutine is done..!")
         }
     }
 
@@ -30,18 +61,18 @@ class ExampleUnitTest {
     fun main()= runBlocking {
         launch {
             delay(200L)
-            println("Task from runBlocking")
+            printlnln("Task from runBlocking")
         }
         coroutineScope{
             launch {
                 delay(500L)
-                println("Task from nested launch")
+                printlnln("Task from nested launch")
             }
             delay(100L)
-            println("Task from coroutine scope")
+            printlnln("Task from coroutine scope")
         }
 
-        println("Coroutine scope is over")
+        printlnln("Coroutine scope is over")
 
     }
 
@@ -51,14 +82,14 @@ class ExampleUnitTest {
             withTimeout(4200L) {
                 repeat(10) {
                     delay(1000L)
-                    println("I'm working")
+                    printlnln("I'm working")
                 }
             }
         }
         runBlocking {
             job.join()
-            println("Coroutine is done..!")
+            printlnln("Coroutine is done..!")
         }
-    }
+    }*/
 
 }
