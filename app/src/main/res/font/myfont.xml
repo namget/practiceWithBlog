@@ -5,6 +5,8 @@
 <font-family xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <!--
+
+    weight 가 400이면 normal style
     <font
         android:font="@font/body_l"
         android:fontStyle="normal"
