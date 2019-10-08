@@ -12,7 +12,6 @@ import org.junit.Test
 class ExampleUnitTest {
 
 
-
     /**
      *  doOnError보다 onErrorResumeNext가 먼저 나오게되면 error를 next로 내려주게된다.
      * */
@@ -28,16 +27,22 @@ class ExampleUnitTest {
 //            }
 
         Observable.create(ObservableOnSubscribe<String> { subscriber ->
-            println("Start to subscribe items")
-            subscriber.onError(Throwable("Occurs Error!!"))
+            println("Start to subscribe items1")
             subscriber.onNext("emit 1")
             subscriber.onNext("emit 2")
+            subscriber.onError(Throwable("Occurs Error!!"))
 //            subscriber.onError(Throwable("Occurs Error!!"))
         })
+            .doOnError { println("doOnError1") }
             .onErrorResumeNext(
-                Observable.just("emit 3")
+                Observable.create(ObservableOnSubscribe<String> { subscriber ->
+                    println("Start to subscribe items2")
+                    subscriber.onNext("emit 55")
+                    subscriber.onNext("emit 66")
+                    subscriber.onError(Throwable("Occurs Error!!"))
+                })
             )
-            .doOnError { println("doOnError") }
+            .doOnError { println("doOnError2") }
             .subscribe(
                 { next -> println("Next : $next") },
                 { err -> println("Error : " + err.toString()) })
