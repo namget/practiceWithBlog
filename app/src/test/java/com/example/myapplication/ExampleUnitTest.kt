@@ -1,7 +1,8 @@
 package com.example.myapplication
 
-import io.reactivex.Observable
-import io.reactivex.ObservableOnSubscribe
+import io.reactivex.Single
+import io.reactivex.SingleOnSubscribe
+import io.reactivex.SingleSource
 import org.junit.Test
 
 /**
@@ -19,14 +20,27 @@ class ExampleUnitTest {
     fun test() {
 //        Observable.just("emit 1", "emit 2", Exception())
 //            .subscribeOn(AndroidSchedulers.mainThread())
-//            .doOnError {}
+//            .doOnError {println("doOnError")}
 //            .onErrorResumeNext(Observable.just("emmit 3"))
 //            .subscribe {
 //
-//
 //            }
 
-        Observable.create(ObservableOnSubscribe<String> { subscriber ->
+        Single.create(SingleOnSubscribe<String> {
+            it.onError(NullPointerException())
+        }).onErrorResumeNext {
+                println("singlesource : ")
+            SingleSource {
+                Single.concat(Single.just(123), Single.just("1"))
+                    .filter { it is String }
+                    .first("zzz")
+            }
+        }.subscribe(
+            { next -> println("Next : $next") },
+            { err -> println("Error : " + err.toString()) })
+
+
+/*        Observable.create(ObservableOnSubscribe<String> { subscriber ->
             println("Start to subscribe items1")
             subscriber.onNext("emit 1")
             subscriber.onNext("emit 2")
@@ -34,18 +48,18 @@ class ExampleUnitTest {
 //            subscriber.onError(Throwable("Occurs Error!!"))
         })
             .doOnError { println("doOnError1") }
-            .onErrorResumeNext(
-                Observable.create(ObservableOnSubscribe<String> { subscriber ->
-                    println("Start to subscribe items2")
-                    subscriber.onNext("emit 55")
-                    subscriber.onNext("emit 66")
-                    subscriber.onError(Throwable("Occurs Error!!"))
-                })
-            )
-            .doOnError { println("doOnError2") }
+//            .onErrorResumeNext(
+//                Observable.create(ObservableOnSubscribe<String> { subscriber ->
+//                    println("Start to subscribe items2")
+//                    subscriber.onNext("emit 55")
+//                    subscriber.onNext("emit 66")
+//                    subscriber.onError(Throwable("Occurs Error!!"))
+//                })
+//            )
+//            .doOnError { println("doOnError2") }
             .subscribe(
                 { next -> println("Next : $next") },
-                { err -> println("Error : " + err.toString()) })
+                { err -> println("Error : " + err.toString()) })*/
     }
 
 /*
