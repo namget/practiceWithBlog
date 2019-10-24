@@ -1,8 +1,7 @@
 package com.example.myapplication
 
-import io.reactivex.Single
-import io.reactivex.SingleOnSubscribe
-import io.reactivex.SingleSource
+import io.reactivex.*
+import io.reactivex.functions.BiFunction
 import org.junit.Test
 
 /**
@@ -26,7 +25,16 @@ class ExampleUnitTest {
 //
 //            }
 
-        Single.create(SingleOnSubscribe<String> {
+/*        Single.create(SingleOnSubscribe<String> {
+            it.onSuccess("a")
+            throw NullPointerException()
+//            it.onError(NullPointerException())
+        }).subscribe(
+            { success -> println("success : $success") },
+            { err -> println("Error : " + err.toString()) })*/
+
+
+/*        Single.create(SingleOnSubscribe<String> {
             it.onError(NullPointerException())
         }).onErrorResumeNext {
                 println("singlesource : ")
@@ -37,10 +45,10 @@ class ExampleUnitTest {
             }
         }.subscribe(
             { next -> println("Next : $next") },
-            { err -> println("Error : " + err.toString()) })
+            { err -> println("Error : " + err.toString()) })*/
 
 
-/*        Observable.create(ObservableOnSubscribe<String> { subscriber ->
+        Observable.create(ObservableOnSubscribe<String> { subscriber ->
             println("Start to subscribe items1")
             subscriber.onNext("emit 1")
             subscriber.onNext("emit 2")
@@ -48,19 +56,79 @@ class ExampleUnitTest {
 //            subscriber.onError(Throwable("Occurs Error!!"))
         })
             .doOnError { println("doOnError1") }
-//            .onErrorResumeNext(
-//                Observable.create(ObservableOnSubscribe<String> { subscriber ->
-//                    println("Start to subscribe items2")
-//                    subscriber.onNext("emit 55")
-//                    subscriber.onNext("emit 66")
-//                    subscriber.onError(Throwable("Occurs Error!!"))
-//                })
-//            )
-//            .doOnError { println("doOnError2") }
+            .onErrorResumeNext(
+                Observable.create(ObservableOnSubscribe<String> { subscriber ->
+                    println("Start to subscribe items2")
+                    subscriber.onNext("emit 55")
+                    subscriber.onNext("emit 66")
+                    subscriber.onError(Throwable("Occurs Error!!"))
+                })
+            )
+            .doOnError { println("doOnError2") }
             .subscribe(
                 { next -> println("Next : $next") },
-                { err -> println("Error : " + err.toString()) })*/
+                { err -> println("Error : " + err.toString()) })
     }
+
+    @Test
+    fun test2() {
+
+
+//            Single.concat(Single.create(SingleOnSubscribe<String> {
+//                it.onSuccess("aaa")
+//            }), Single.create(SingleOnSubscribe<Int> {
+//                it.onSuccess(1)
+//            }))
+        Single.create(SingleOnSubscribe<String> {
+            println("create")
+            it.onError(Exception())
+        }).onErrorResumeNext {
+            println("onErrorResumeNext1")
+            SingleSource { emitter ->
+                println("onErrorResumeNext2")
+                Single.concat(Single.create(SingleOnSubscribe<String> {
+                    it.onSuccess("aaab")
+                }), Single.create(SingleOnSubscribe<Int> {
+                    it.onSuccess(1)
+                })).first("").subscribe(
+                    {
+                        if (it is String) {
+                            emitter.onSuccess(it)
+                        }
+                    }, {
+                        emitter.onError(it)
+                    })
+            }
+        }.subscribe({
+            println("subscribe next  : $it")
+        }, {
+            println("subscribe error : $it")
+        })
+    }
+
+    @Test
+    fun runZip() {
+        val a = Single.just("a")
+        val b = Single.just(1)
+
+//        Single.concat(a, b)
+//            .subscribe({
+//
+//            },{
+//
+//            })
+
+        Single.zip(a, b, BiFunction<String, Int, String> { a,b->
+            a + b
+        }).subscribe({
+            println("$it")
+        },{
+            println("$it")
+        })
+
+
+    }
+
 
 /*
     @Test
