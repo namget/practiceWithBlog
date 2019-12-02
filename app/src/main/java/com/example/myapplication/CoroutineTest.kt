@@ -1,6 +1,7 @@
 package com.example.myapplication
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
 
@@ -13,103 +14,80 @@ class CoroutineTest : AppCompatActivity() {
 
     val supervisorJob = SupervisorJob()
 
+    /**
+    용어정리
+
+    --GlobalScope --
+    해당 어플리케이션의 전체 생명주기를 따른다.
+
+    --- 코루틴 빌더---
+    /*launch */
+    launch = job을 반환 서버의 작업의 결과값을 받을 필요 없을때
+    join 작업중인 상태가 있으면 해당 작업이 끝난후에 아래의 작업을 시킴
+
+    /*async*/
+    async = defered를 반환하며
+    await = 작업중인 값을 기다리며 리턴값을 반환
+
+
+    -- 함수 ---
+    - delay 는 suspend 함수이다.  suspend란 잠시 중단한다는 의미, 중단후에 resume을 시키는데,
+    코루틴은 일시중지, 스레드입장에선 non-blocking
+
+    - runBlocking 는 해당 작업이 끝날때까지 스레드를 블락시킴
+
+
+     */
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        launchTest()
+        main3()
     }
 
-
-    // bridging blocking and non-blocking worlds
-    // delay == Thread.sleep()
-    fun main() {
-        GlobalScope.launch {
-            delay(1000L)
-            println("world")
-        }
-        println("Hello,")
-        // block main thread
-//        Thread.sleep(2000)
-
+    //main thread blocking
+    private fun main() {
         runBlocking {
-            delay(2000L)
-        }
-    }
-
-    fun launchTest() {
-        val scope = CoroutineScope(Dispatchers.Main)
-        val job = scope.launch {
-            repeat(5) {
+            //start main coroutine
+            launch {
                 delay(1000L)
-                println("m1 coroutine $it")
+                Log.e("coroutine", "world")
             }
-            CoroutineScope(Dispatchers.Main).launch {
-                repeat(5) {
-                    delay(1000L)
-                    println("m2 coroutine $it")
-                }
-            }
-            CoroutineScope(Dispatchers.Main).launch {
-                repeat(5) {
-                    delay(1000L)
-                    println("m3 coroutine $it")
-                }
-            }
+            Log.e("coroutine", "Hello")
         }
+        //main thread blocking
+        Log.e("coroutine", "end")
     }
 
-    fun deferTest(){
-        val defered : Deferred<String> = CoroutineScope(Dispatchers.Main).async{
-            "result"
-        }
-
-
-
-    }
-
-    fun main4() {
-        val job = GlobalScope.launch(Dispatchers.Default) {
-            repeat(10) {
-                delay(1000L)
-                println("I'm working")
-            }
-        }
-
-        runBlocking {
-            job.cancelAndJoin()
-            println("Coroutine is done..!")
-        }
-    }
-
-
-    fun main3() = runBlocking<Unit> {
-        GlobalScope.launch {
-            delay(1000L)
-            println("World!")
-        }
-        println("Hello")
-        delay(2000L) //
-    }
-
-
+    //job.join
     fun main2() {
-        //blocking
-        GlobalScope.launch {
-            delay(1000L)
-            println("world")
-        }
-    }
-
-
-    fun test2() {
-        val job = GlobalScope.launch(Dispatchers.Default) {
-            repeat(10) {
-                delay(1000L)
-                println("I'm working")
-            }
-        }
         runBlocking {
-            delay(1000L)
-            job.join()
+            //start main coroutine
+            val job = launch {
+                delay(1000L)
+                Log.e("coroutine", "world")
+            }
+            job.join() // join일경우 job의
+            Log.e("coroutine", "Hello")
         }
+        //main thread blocking
+        Log.e("coroutine", "end")
     }
+
+    private fun main3() {
+        runBlocking {
+            //start main coroutine
+            val deferred = async {
+
+                delay(1000L)
+                val world = "world"
+                world
+            }
+            val data = deferred.await() //
+            Log.e("coroutine", "Hello $data")
+        }
+        //main thread blocking
+        Log.e("coroutine", "end")
+    }
+
+
 }
