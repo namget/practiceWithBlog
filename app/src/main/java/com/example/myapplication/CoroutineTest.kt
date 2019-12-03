@@ -29,15 +29,36 @@ class CoroutineTest : AppCompatActivity() {
     async = defered를 반환하며
     await = 작업중인 값을 기다리며 리턴값을 반환
 
+    runBlocking 는 해당 작업이 끝날때까지 스레드를 블락시킴
+
 
     -- 함수 ---
     - delay 는 suspend 함수이다.  suspend란 잠시 중단한다는 의미, 중단후에 resume을 시키는데,
     코루틴은 일시중지, 스레드입장에선 non-blocking
 
-    - runBlocking 는 해당 작업이 끝날때까지 스레드를 블락시킴
+    ---- suspend & resume ----
+    suspend : 현재의 코루틴을 멈춘다
+    resume : 멈춰있던 코루틴 부분을 다시 시작한다.
 
+
+    -- dispatcher --
+    coroutine context는 어떤 스레드에서 해당 coroutine을 실행할지에 대한 dispatcher 정보를 담고있다.
+    io , main, default, unconfine
+    https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-dispatcher/
 
      */
+
+    suspend fun fetchDocs() {
+        val result = getInternet("www.naver.com")
+        show(result)
+    }
+
+    fun show(ss: String) {
+    }
+
+    suspend fun getInternet(url: String) = withContext(Dispatchers.IO) {
+        "ss"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
