@@ -14,13 +14,32 @@ class CoroutineTest : AppCompatActivity() {
 
     val supervisorJob = SupervisorJob()
 
+
     /**
     용어정리
 
-    --GlobalScope --
-    해당 어플리케이션의 전체 생명주기를 따른다.
 
-    --- 코루틴 빌더---
+    --- CoroutineScope ---
+
+    //코루틴 개념익히기
+    https://wooooooak.github.io/kotlin/2019/08/25/%EC%BD%94%ED%8B%80%EB%A6%B0-%EC%BD%94%EB%A3%A8%ED%8B%B4-%EA%B0%9C%EB%85%90-%EC%9D%B5%ED%9E%88%EA%B8%B0/
+    //medium blog
+    https://medium.com/swlh/kotlin-coroutines-in-android-basics-9904c98d4714
+
+
+    CoroutineScope
+    모든 코루틴은 Coroutine Scope 안에서 동작한다. 이것은  Coroutine Context를 파라미터로서 가지고 있다.
+    그리고 우리가 사용가능한 여러가지의 스코프가 존재한다.
+
+    1. CoroutineScope : 커스텀한 CoroutineContext를 통해 스코프를 생성한다.
+    2. MainScopre : UI Components를 위한 메인스코프를 만든다. SupervisorJob() 과 함게 메인스레드 위에서 동작한다.
+    child job의 실패는 다른것들에 영향을 미치지 않는다.
+    public fun MainScope : CroutineScope = ContextScope(SupervisorJob() + Dispatchers.Main)
+
+    3. GlobalScope : 해당 어플리케이션의 전체 생명주기를 따른다.
+
+
+    --- 코루틴 빌더 Couroutine Builder---
     /*launch */
     launch = job을 반환 서버의 작업의 결과값을 받을 필요 없을때
     join 작업중인 상태가 있으면 해당 작업이 끝난후에 아래의 작업을 시킴
@@ -41,12 +60,47 @@ class CoroutineTest : AppCompatActivity() {
     resume : 멈춰있던 코루틴 부분을 다시 시작한다.
 
 
-    -- dispatcher --
+    -- dispatchers --
     coroutine context는 어떤 스레드에서 해당 coroutine을 실행할지에 대한 dispatcher 정보를 담고있다.
-    io , main, default, unconfine
+    IO , Main, Default, Unconfined
     https://kotlin.github.io/kotlinx.coroutines/kotlinx-coroutines-core/kotlinx.coroutines/-coroutine-dispatcher/
+    Dispatchers.Main + Job()
+
+    Default: 백그라운드 풀의 스레드를 공유해서 사용한다./ 최대 스레드 사용 갯수는 씨피유의 수와 같다.
+    IO: Default와 스레드를 공유하면서 스레드의 수는 parallelism에 의해 제한된다. 보통 64스레드 혹은 코어의 갯수이다.
+    Main: 안드로이드 메인 스레드와 동일하다.
+    Unconfined: Coroutine dispatcher는 어떠한 스레드에도 없고 코루틴은 현재의 첫번째 스레드에서 실행된다.
+
+
+    -- CoroutineExceptionHandler --
+    uncaught exceptions을 핸들링 가능하다.
+
+    1.
+
+
+
+    -- Coroutine Body --
+    CoroutineScope(Dispatchers.Main + Job()).launch {
+    //Coroutine body
+    }
+
+
 
      */
+
+
+    fun a() {
+        CoroutineScope(Dispatchers.Main + Job()).launch {
+            val user = fetchUser()
+
+        }
+    }
+
+    suspend fun fetchUser(): MainActivity.User = withContext(Dispatchers.IO) {
+        //todo
+        MainActivity.User("11", 11);
+    }
+
 
     suspend fun fetchDocs() {
         val result = getInternet("www.naver.com")
@@ -111,4 +165,7 @@ class CoroutineTest : AppCompatActivity() {
     }
 
 
+    fun test() {
+        val handler = CoroutineExceptionHandler { _, throwable -> Log.d("demo", "$throwable") }
+    }
 }
