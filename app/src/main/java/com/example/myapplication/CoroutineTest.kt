@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import kotlinx.coroutines.*
+import java.io.IOException
 
 
 /**
@@ -164,8 +165,85 @@ class CoroutineTest : AppCompatActivity() {
         Log.e("coroutine", "end")
     }
 
-
+    //handler
     fun test() {
-        val handler = CoroutineExceptionHandler { _, throwable -> Log.d("demo", "$throwable") }
+        val handler = CoroutineExceptionHandler { _, throwable ->
+            //1.코루틴을 try catch로 묶게되면 안됨
+            //2.이 핸들러는 CancellationException을 무시해버림
+            //3. 따라서 invokeOnCompletion을 이용해야함
+            Log.d("demo", "$throwable")
+        }
+
+        CoroutineScope(Dispatchers.Main + handler).launch {
+            doSomeThing()
+        }
+
+
+        val job = CoroutineScope(Dispatchers.Main).launch {
+            doSomeThing2()
+        }
+
+        job.invokeOnCompletion {
+            val error = it ?: return@invokeOnCompletion
+        }
+
+
     }
+
+    suspend fun doSomeThing() {
+        delay(1000)
+        throw IOException()
+    }
+
+    suspend fun doSomeThing2() {
+        delay(1000)
+        throw CancellationException()
+    }
+
+    fun jobTest(){
+        /**
+         *        parentJob
+         *        childJob1
+         *  childJob2 childJob3
+         */
+        val parentJob = Job()
+        val childJob1 = CoroutineScope(parentJob).launch {
+            val childJob2 = launch {  }
+            val childJob3 = launch {  }
+        }
+
+
+        /**
+         *  parentJob1        patentJob2
+         *  childJobN1        childJobN3
+         *  childJobN2
+         */
+        val parentJob1 = Job()
+        val parentJob2 = Job()
+        val childJobN1 = CoroutineScope(parentJob1).launch {
+            val childJobN2 = launch {  }
+            val childJobN3 = launch(parentJob2) {  }
+        }
+
+        //이렇게 할경우 부모가 취소되면 자식도 즉시 취소된다.
+        // 자식에서 취소나 실패가 일어날경우 즉시 부모와 다른 자식도 취소된다.
+
+
+        val prJob = Job()
+        CoroutineScope(Dispatchers.Main + prJob).launch {
+            val childJob = launch {
+                delay(5000)
+                //실행 못함
+            }
+
+            launch{
+                delay(1000)
+                prJob.cancel() //1초후에 부모의 잡을 멈춘다.
+            }
+
+        }
+
+
+    }
+
 }
