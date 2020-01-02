@@ -46,19 +46,19 @@ class KtxTest : Fragment() {
     // activityViewModel도 가능
     //implementation "androidx.fragment:fragment-ktx:1.1.0"
     fun fragment() {
-    // Get a reference to the ViewModel scoped to this Fragment
+        // Get a reference to the ViewModel scoped to this Fragment
         val viewModel by viewModels<MyViewModel>()
-        val viewModelWithFactory by viewModels<MyViewModel>{viewModelFactory }
-    // Get a reference to the ViewModel scoped to its Activity
+        val viewModelWithFactory by viewModels<MyViewModel> { viewModelFactory }
+        // Get a reference to the ViewModel scoped to its Activity
         val viewModel2 by activityViewModels<MyViewModel>()
     }
+
     class MyViewModel : ViewModel()
     class User()
 
 
-
     //implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.2.0-rc03"
-    fun lifecycle(){
+    fun lifecycle() {
         //suspend function 만 사용가능
         whenStarted {
             // The block inside will run only when Lifecycle is at least STARTED.
@@ -87,8 +87,9 @@ class KtxTest : Fragment() {
         }
 
     }
+
     //Lifecycle 2
-    class MyFragment: Fragment() {
+    class MyFragment : Fragment() {
         init {
             //viewmodel scope를 이용한 방법
             // 코루틴이 실행되는 동안 액티비티나 클래스가 destroy된다면 코루틴은 자동으로 canceled 된다.
@@ -110,7 +111,7 @@ class KtxTest : Fragment() {
     // implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.2.0-rc03"
     // coroutine을 이용해서 비동기로 LiveData를 이용하는 방법이다.
     // loadUser는 suspend function 이여야 하고 동작이 완료되면 user로 emit 한다.
-    fun liveData(){
+    fun liveData() {
         val user: LiveData<User> = liveData {
             val data = database.loadUser() // loadUser is a suspend function.
             emit(data)
@@ -122,11 +123,10 @@ class KtxTest : Fragment() {
         emit(Result.loading())
         try {
             emit(Result.success(fetchUser()))
-        } catch(ioException: Exception) {
+        } catch (ioException: Exception) {
             emit(Result.error(ioException))
         }
     }
-
 
 
     // implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0-rc03"
@@ -135,8 +135,8 @@ class KtxTest : Fragment() {
         // Make a network request without blocking the UI thread
         private fun makeNetworkRequest() {
             // launch a coroutine in viewModelScope
-            viewModelScope.launch  {
-//                remoteApi.slowFetch()
+            viewModelScope.launch {
+                //                remoteApi.slowFetch()
 //                ...
             }
         }
@@ -145,8 +145,19 @@ class KtxTest : Fragment() {
     //뷰모델 스코프는 뷰모델이 cleared 되면 코루틴은 취소된다.
 
 
-
-
+    //implementation "com.google.android.play:core-ktx:1.6.4"
+    // appUpdateManger
+    fun playKtx(){
+        /*manager.requestUpdateFlow().collect
+        { updateResult ->
+            when (updateResult) {
+                is AppUpdateResult.Available -> TODO()
+                is AppUpdateResult.InProgress -> TODO()
+                is AppUpdateResult.Downloaded -> TODO()
+                AppUpdateResult.NotAvailable -> TODO()
+            }
+        }*/
+    }
 
 
 
