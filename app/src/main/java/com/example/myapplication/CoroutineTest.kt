@@ -228,22 +228,17 @@ class CoroutineTest : AppCompatActivity() {
         //이렇게 할경우 부모가 취소되면 자식도 즉시 취소된다.
         // 자식에서 취소나 실패가 일어날경우 즉시 부모와 다른 자식도 취소된다.
 
-
         val prJob = Job()
         CoroutineScope(Dispatchers.Main + prJob).launch {
             val childJob = launch {
                 delay(5000)
                 //실행 못함
             }
-
             launch{
                 delay(1000)
                 prJob.cancel() //1초후에 부모의 잡을 멈춘다.
             }
-
         }
-
-
     }
 
 }
