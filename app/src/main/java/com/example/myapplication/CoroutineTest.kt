@@ -33,7 +33,7 @@ class CoroutineTest : AppCompatActivity() {
     그리고 우리가 사용가능한 여러가지의 스코프가 존재한다.
 
     1. CoroutineScope : 커스텀한 CoroutineContext를 통해 스코프를 생성한다.
-    2. MainScopre : UI Components를 위한 메인스코프를 만든다. SupervisorJob() 과 함게 메인스레드 위에서 동작한다.
+    2. MainScope : UI Components를 위한 메인스코프를 만든다. SupervisorJob() 과 함게 메인스레드 위에서 동작한다.
     child job의 실패는 다른것들에 영향을 미치지 않는다.
     public fun MainScope : CroutineScope = ContextScope(SupervisorJob() + Dispatchers.Main)
 
