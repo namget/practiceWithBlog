@@ -19,22 +19,30 @@ class CoroutineTest2 : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         CoroutineScope(Dispatchers.Main).launch {
-            a1()
-            a2()
-            Log.e("11","a3")
-        }
-        Log.e("11","a4")
+            Log.e("11", "a66666")
+            CoroutineScope(Dispatchers.Main).launch {
+                Log.e("11", "a5555")
+                a1()
+                Log.e("11", "a44444")
+            }
+            CoroutineScope(Dispatchers.Main).launch {
+                Log.e("11", "a66666")
+                a2()
+                Log.e("1", "a33333")
+            }
 
+            Log.e("11", "a77777")
+        }
     }
 
     suspend fun a1() {
         delay(2000)
-        Log.e("11","a1")
+        Log.e("11", "a111111")
     }
 
     suspend fun a2() {
         delay(1000)
-        Log.e("11","a2")
+        Log.e("11", "a222222")
     }
 
 

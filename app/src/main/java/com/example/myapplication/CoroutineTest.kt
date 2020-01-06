@@ -86,6 +86,10 @@ class CoroutineTest : AppCompatActivity() {
     }
 
 
+    코루틴
+    두개의 비동기를 합쳐 하나의 zip형태로 처리하는 방법
+    https://stackoverflow.com/questions/56622619/zip-network-requests-via-kotlin-coroutine-flow
+
 
      */
 
@@ -200,7 +204,7 @@ class CoroutineTest : AppCompatActivity() {
         throw CancellationException()
     }
 
-    fun jobTest(){
+    fun jobTest() {
         /**
          *        parentJob
          *        childJob1
@@ -208,8 +212,8 @@ class CoroutineTest : AppCompatActivity() {
          */
         val parentJob = Job()
         val childJob1 = CoroutineScope(parentJob).launch {
-            val childJob2 = launch {  }
-            val childJob3 = launch {  }
+            val childJob2 = launch { }
+            val childJob3 = launch { }
         }
 
 
@@ -221,8 +225,8 @@ class CoroutineTest : AppCompatActivity() {
         val parentJob1 = Job()
         val parentJob2 = Job()
         val childJobN1 = CoroutineScope(parentJob1).launch {
-            val childJobN2 = launch {  }
-            val childJobN3 = launch(parentJob2) {  }
+            val childJobN2 = launch { }
+            val childJobN3 = launch(parentJob2) { }
         }
 
         //이렇게 할경우 부모가 취소되면 자식도 즉시 취소된다.
@@ -234,7 +238,7 @@ class CoroutineTest : AppCompatActivity() {
                 delay(5000)
                 //실행 못함
             }
-            launch{
+            launch {
                 delay(1000)
                 prJob.cancel() //1초후에 부모의 잡을 멈춘다.
             }
