@@ -1,3 +1,4 @@
+package com.example.myapplication/*
 package com.example.myapplication
 
 import android.content.SharedPreferences
@@ -11,9 +12,11 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 
+*/
 /**
  * Created by Namget on 2020.01.02.
- */
+ *//*
+
 class KtxTest : Fragment() {
 
     //https://developer.android.com/kotlin/ktx
@@ -148,7 +151,8 @@ class KtxTest : Fragment() {
     //implementation "com.google.android.play:core-ktx:1.6.4"
     // appUpdateManger
     fun playKtx(){
-        /*manager.requestUpdateFlow().collect
+        */
+/*manager.requestUpdateFlow().collect
         { updateResult ->
             when (updateResult) {
                 is AppUpdateResult.Available -> TODO()
@@ -156,9 +160,10 @@ class KtxTest : Fragment() {
                 is AppUpdateResult.Downloaded -> TODO()
                 AppUpdateResult.NotAvailable -> TODO()
             }
-        }*/
+        }*//*
+
     }
 
 
 
-}
+}*/
