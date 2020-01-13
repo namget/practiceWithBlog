@@ -91,7 +91,12 @@ class CoroutineTest : AppCompatActivity() {
     https://stackoverflow.com/questions/56622619/zip-network-requests-via-kotlin-coroutine-flow
 
 
-     */
+     < ---  suspend 와 blocking---- >
+     supsend와 blocking은 비슷하지만 실질적으론 완전 다르다.
+    blocking 은 같은 스레드로 실행된 부모의 실행을 정지시키는것을 의미한다. 만약 UI스레드에서 블락킹을 시키면 실행이 끝날때까지 UI 입력을 블락한다.
+
+
+    */
 
 
     fun a() {
