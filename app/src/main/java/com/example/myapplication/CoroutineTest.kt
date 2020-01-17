@@ -96,6 +96,58 @@ class CoroutineTest : AppCompatActivity() {
     blocking 은 같은 스레드로 실행된 부모의 실행을 정지시키는것을 의미한다. 만약 UI스레드에서 블락킹을 시키면 실행이 끝날때까지 UI 입력을 블락한다.
 
 
+
+
+
+     //예제 테스트 결과
+
+    suspend fun a1() {
+    delay(2000)
+    Log.e("11", "a111111")
+    }
+
+    suspend fun a2() {
+    delay(1000)
+    Log.e("11", "a222222")
+    }
+
+    CoroutineScope(Dispatchers.Main).launch {
+    Log.e("11", "a66666")
+    a1()
+    a2()
+    Log.e("11", "a77777")
+    }
+
+    하나의 코루틴 스코프에서는 딜레이 동작이 처리된 후 동작
+    결과
+     a6666
+     a111111
+     a2222222
+     a777777
+
+
+    CoroutineScope(Dispatchers.Main).launch {
+      Log.e("11", "a66666")
+      CoroutineScope(Dispatchers.Main).launch {
+         a1()
+       }
+       CoroutineScope(Dispatchers.Main).launch {
+         a2()
+       }
+      Log.e("11", "a77777")
+    }
+
+     각자의 코루틴 스코프를 동작시킬경우 부모와는 다르게 자식의 코루틴 스코프를 생성
+      결과
+     a66666
+     a7777
+     a222222
+     a111111
+
+     코루틴을 동작시키다가 cancel을 시키지 않고 화면을 나간다면
+     memory leak 혹은 resource 낭비
+
+
     */
 
 
