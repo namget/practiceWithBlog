@@ -1,8 +1,9 @@
-package com.example.myapplication
+package com.example.myapplication.coroutine
 
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.myapplication.MainActivity
 import kotlinx.coroutines.*
 import java.io.IOException
 

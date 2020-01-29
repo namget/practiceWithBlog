@@ -1,4 +1,4 @@
-package com.example.myapplication/*
+package com.example.myapplication.ktx/*
 package com.example.myapplication
 
 import android.content.SharedPreferences
