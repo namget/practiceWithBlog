@@ -59,22 +59,22 @@ class Chapter2 {
         private val modificationTimeStamp = Date()
     }
 
-    fun test(){
-        var s = 0
-        var t = arrayOf(0)
-        for(j in 0..34){
-            s += (t[j] * 4) /5
-        }
-
-        val realDaysPerIdealDay = 4
-        val WORK_DAYS_PER_WEEKS = 5
-        val NUMBER_OF_TASKS = 34
-        for(j in 0..NUMBER_OF_TASKS){
-            val realTaskDays = taskEstimate[j] * realDaysPerIdealDay
-            val realTaskWeeks = (realTaskDays / WORK_DAYS_PER_WEEKS)
-            sum += realTaskWeeks
-        }
-    }
+//    fun test(){
+//        var s = 0
+//        var t = arrayOf(0)
+//        for(j in 0..34){
+//            s += (t[j] * 4) /5
+//        }
+//
+//        val realDaysPerIdealDay = 4
+//        val WORK_DAYS_PER_WEEKS = 5
+//        val NUMBER_OF_TASKS = 34
+//        for(j in 0..NUMBER_OF_TASKS){
+//            val realTaskDays = taskEstimate[j] * realDaysPerIdealDay
+//            val realTaskWeeks = (realTaskDays / WORK_DAYS_PER_WEEKS)
+//            sum += realTaskWeeks
+//        }
+//    }
 
     
 
