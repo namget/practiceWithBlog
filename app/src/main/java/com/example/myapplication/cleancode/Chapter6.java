@@ -62,7 +62,7 @@ public class Chapter6 {
 //        }
 //    }
 
-
+//    final String outputDir = ctxt.getOptions(),getScratchDir().getAbsolutePath();
 //    public class Square implements Shape {
 //        private Point topLeft;
 //        private double side;
@@ -92,4 +92,23 @@ public class Chapter6 {
 //            return PI * radius * radius;
 //        }
 //    }
+
+
+
+//    Options opts = ctxt.getOptions();
+//    File scratchDir = opts.getScratchDir();
+//    final String outputDir = scratchDir.getAbsolutePath();
+
+//
+//    ctxt.getAbsolutePathOfSc ratchDirecto ryOption();
+//ctx.getScratchDirectoryOption().getAbsolutePath()
+
+
+//    String outFile = outputDir + "/" + className.replace('.', '/') + ".class";
+//    FileOutputStream tout = new FileOutputStream(outFile);
+//    BufferedOutputStream bos = new B니fferedOutputStream(fout);
+//
+//
+//    BufferedOutputStream bos = ctxt.createScratchFileStream(classFileName);
+
 }
