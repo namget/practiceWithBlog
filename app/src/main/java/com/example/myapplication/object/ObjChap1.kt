@@ -1,11 +1,14 @@
 package com.example.myapplication.`object`
 
+/*
 import java.time.LocalDate
 import java.time.LocalDateTime
 
+*/
 /**
  * Created by Namget on 2020.03.16.
- */
+ *//*
+
 class Invitation {
     private val whens: LocalDateTime
 }
@@ -41,4 +44,4 @@ class Theater(private val ticketSeller: TicketSeller){
         val ticket = ticketSeller.ticketOffice.getTicket()
             ...
     }
-}
+}*/
